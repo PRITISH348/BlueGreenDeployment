@@ -12,6 +12,10 @@ pipeline {
         stage('Deploy Green Environment') {
             steps {
                 sh 'docker-compose -f docker-compose-green.yml up -d'
+                // Check Prometheus metrics for the green environment
+                sh 'curl http://localhost:9292/api/v1/query?query=up{job="app"}' | grep 1
+
+// If Prometheus metrics are healthy, proceed to switch traffic
                 // Add tests or validations for the green environment
                 // If successful, proceed to switch traffic
             }
