@@ -2,48 +2,31 @@ pipeline {
     agent any
 
     stages {
-        stage('Blue Deployment') {
+        stage('Deploy Blue Environment') {
             steps {
-                // Deploy the current version (blue environment)
                 sh 'docker-compose -f docker-compose-blue.yml up -d'
+                // Add any validations or tests for the blue environment
             }
         }
 
-        stage('Integration Tests') {
+        stage('Deploy Green Environment') {
             steps {
-                // Run integration tests against the blue environment
-                sh 'docker exec blue_container pytest /path/to/tests'
-            }
-        }
-
-        stage('Green Deployment') {
-            steps {
-                // Deploy the new version (green environment)
                 sh 'docker-compose -f docker-compose-green.yml up -d'
+                // Add tests or validations for the green environment
+                // If successful, proceed to switch traffic
             }
         }
 
-        stage('Validation') {
+        stage('Switch Traffic') {
             steps {
-                // Run validation tests against the green environment
-                sh 'docker exec green_container pytest /path/to/validation/tests'
+                script {
+                    sh "docker-compose -f docker-compose.yml down" // Shut down both blue and green
+                    sh "mv docker-compose-green.yml docker-compose.yml" // Rename green to default compose file
+                    sh 'docker-compose up -d' // Start the green environment
+                    // Implement logic to switch traffic from blue to green (DNS update, load balancer configurations, etc.)
+                    // Ensure proper validation before switching traffic
+                }
             }
-        }
-
-        stage('Switch Traffic (Blue/Green Swap)') {
-            steps {
-                // Perform blue/green switch (traffic routing)
-                // Your logic to update routing to the green environment
-            }
-        }
-    }
-
-    post {
-        always {
-            // Cleanup or rollback if needed
-            sh 'docker-compose -f docker-compose-blue.yml down'
-            sh 'docker-compose -f docker-compose-green.yml down'
         }
     }
 }
-
