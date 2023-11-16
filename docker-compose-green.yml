@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.green14
     ports:
-      - "8081:8080"  # Expose a different port for the green environment
+      - "8081:8080" 
+      - "9292:9292"  # Expose a different port for the green environment
     # Add other configurations specific to the green environment
 
