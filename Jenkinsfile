@@ -24,6 +24,11 @@ pipeline {
         stage('Switch Traffic') {
             steps {
                 script {
+                    // Update DNS or load balancer configuration to switch traffic to the green environment
+                    sh 'sudo nginx -s reload'
+
+// Validate that traffic is now routed to the green environment
+                    curl http://localhost:8080/healthz | grep OK
                     sh "docker-compose -f docker-compose.yml down" // Shut down both blue and green
                     sh "mv docker-compose-green.yml docker-compose.yml" // Rename green to default compose file
                     sh 'docker-compose up -d' // Start the green environment
