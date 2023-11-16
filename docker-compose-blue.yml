@@ -1,0 +1,10 @@
+version: '3'
+services:
+  blue:
+    build:
+      context: .
+      dockerfile: Dockerfile.blue13
+    ports:
+      - "8080:8080"
+    # Add other configurations specific to the blue environment
+

@@ -1,0 +1,8 @@
+FROM node:13
+# Add specific configurations for the blue environment
+WORKDIR /app
+COPY . .
+RUN npm install
+EXPOSE 8080
+CMD ["npm", "start"]
+

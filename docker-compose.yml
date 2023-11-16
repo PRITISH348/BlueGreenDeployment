@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"  # Map container port to host port
+    depends_on:
+      - db  # Declare dependency on the 'db' service
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 1704
+      MYSQL_DATABASE: my_sql
+      MYSQL_USER: pritish
+      MYSQL_PASSWORD: 1704
+    ports:
+      - "3306:3306"  # Map container port to host port
+
