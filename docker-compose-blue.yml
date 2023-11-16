@@ -6,5 +6,6 @@ services:
       dockerfile: Dockerfile.blue13
     ports:
       - "8080:8080"
+      - "9292:9292"
     # Add other configurations specific to the blue environment
 
